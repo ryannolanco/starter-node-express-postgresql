@@ -1,9 +1,21 @@
 const productsService = require('./products.service');
-const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
+
+async function listOutOfStockCount(req, res, next) {
+	res.json({ data: await productsService.listOutOfStockCount() });
+}
+
+async function listPriceSummary(req, res, next) {
+  res.json({ data: await productsService.listPriceSummary() });
+}
+
+async function listTotalWeightByProduct(req, res) {
+  res.json({ data: await productsService.listTotalWeightByProduct() });
+}
 
 async function list(req, res, next) {
-	const data = await productsService.list()
-	res.json({ data })
+	const data = await productsService.list();
+	res.json({ data });
 }
 
 async function productExists(req, res, next) {
@@ -22,6 +34,9 @@ function read(req, res) {
 }
 
 module.exports = {
-  read: [asyncErrorBoundary(productExists), read],
-  list: asyncErrorBoundary(list),
+	read: [asyncErrorBoundary(productExists), read],
+	list: asyncErrorBoundary(list),
+	listOutOfStockCount: asyncErrorBoundary(listOutOfStockCount),
+	listPriceSummary: asyncErrorBoundary(listPriceSummary),
+	listTotalWeightByProduct: asyncErrorBoundary(listTotalWeightByProduct),
 };
